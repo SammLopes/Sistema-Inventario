@@ -22,3 +22,15 @@
 Homestead.json
 Homestead.yaml
 Thumbs.db
+
+# Laradock (itens locais/sensiveis)
+laradock/.env
+laradock/**/data/
+laradock/**/logs/
+laradock/**/mysql/
+laradock/**/redis/
+laradock/**/postgres/
+laradock/**/elasticsearch/
+laradock/**/ssl/*.key
+laradock/**/ssl/*.crt
+laradock/**/.bash_history
