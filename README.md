@@ -11,8 +11,12 @@ Esse é o manual de como rodar o projeto usando o laradock.
 ```bash
 git clone --recurse-submodules <git@github.com:SammLopes/Sistema-Inventario.git || https://github.com/SammLopes/Sistema-Inventario.git>
 ```
+- Caso execute sem a flag `--recurse-submodules`, pode executar esse comando abaixo.
+```bash
+git submodule update --init --recursive
+``` 
 
-### 1) Preparar variáveis de ambiente
+### 2) Preparar variáveis de ambiente
 Crie os arquivos de ambiente a partir dos exemplos:
 
 ```bash
@@ -64,12 +68,13 @@ SESSION_DRIVER=database
 
 > **Importante:** O **DB_HOST** deve ser o **nome do serviço** no `docker-compose` do Laradock (geralmente `mysql`), e **não** `127.0.0.1`.
 
-### 2) Subir os serviços (Nginx, MySQL, NgInx, Php-Fpm)
+### 3) Subir os serviços (Nginx, MySQL, NgInx, Php-Fpm)
+- Para subir esses serviçoes entre na pasta do laradock dentro da raiz do projeto.
 ```bash
-docker compose -f laradock/docker-compose.yml up -d mysql nginx php-fpm mysql 
+sudo docker compose -f ./docker-compose.yml up -d mysql nginx php-fpm  
 ```
 
-### 3) Executar os comandos do Laravel 
+### 4) Executar os comandos do Laravel 
 
 Os comandos a abixo são executados dentro do container, ou seja, dentro do workspace. 
 
@@ -100,7 +105,7 @@ chown -R www-data:www-data storage bootstrap/cache || true
 chmod -R ug+rwX storage bootstrap/cache
 ```
 
-### 4) Acessar a aplicação
+### 5) Acessar a aplicação
 - Navegador: **http://localhost** (porta configurada no `laradock/.env`)
 - Logs úteis:
   ```bash
