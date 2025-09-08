@@ -15,9 +15,13 @@ class ProductController extends Controller
         $this->fakeStoreService = $fakeStoreService;
     }
     
-    public function index()
+    public function index(Request $request)
     {
-        $products = Product::orderBy('name')->get();
+        $perPage = $request->integer('per_page', 10);
+        $products = Product::orderBy('name')
+            ->paginate($perPage)
+            ->withQueryString();
+
         return view('products.index', compact('products'));
     }
 
