@@ -15,6 +15,11 @@ Route::middleware('guest')->group( function() {
 });
 
 Route::middleware('auth')->group( function(){
-      Route::get('/produtos', [ProductController::class, 'index'])->name('produtos.index');
+
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
+
+    Route::get('/produtos', [ProductController::class, 'index'])->name('products.index');
+    Route::put('/produtos/{product}/estoque', [ProductController::class, 'updateStock'])->name('products.update-stock');
+    Route::post('/produtos/sync-api', [ProductController::class, 'syncWithApi'])->name('products.sync-api');
+
 });
