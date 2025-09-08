@@ -39,8 +39,14 @@ class ProductController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Estoque atualizado com sucesso!',
-            'estoque' => $product->estoque
+            'estoque' => $product->stock
         ]);
+    }
+
+    public function syncWithApi()
+    {
+        $result = $this->fakeStoreService->syncProducts();
+        return redirect()->route('products.index')->with('success', $result['message']);
     }
 
 }
