@@ -28,7 +28,7 @@ class Product extends Model
 
     public function getPrecoFormatadoAttribute()
     {
-        return 'R$ ' . number_format($this->preco, 2, ',', '.');
+        return 'R$ ' . number_format($this->price, 2, ',', '.');
     }
 
     public function scopeEstoqueBaixo($query, $limite = 5)

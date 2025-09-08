@@ -84,7 +84,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <strong class="text-success">{{ $product->price }}</strong>
+                                                <strong class="text-success">{{ $product->preco_formatado }}</strong>
                                             </td>
                                             <td>
                                                 <div class="input-group input-group-sm">
