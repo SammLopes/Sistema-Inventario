@@ -18,17 +18,17 @@ class AuthController extends Controller
     {
         $request->validate([
             'email' => 'required|email',
-            'senha' => 'required'
+            'password' => 'required'
         ],[
             'email.required' => 'O email não foi informado', 
             'email.email'    => 'Digite seu email válido', 
-            'senha.required' => 'A senha é obrigatória'
+            'password.required' => 'A senha é obrigatória'
         ]);
 
 
         $user = User::where('email', $request->email)->first();
 
-        if( $user  && Hash::check( $request->senha, $user->senha) ){
+        if( $user  && Hash::check( $request->password, $user->password) ){
 
             Auth::login($user);
             return redirect()->intended('/produtos');

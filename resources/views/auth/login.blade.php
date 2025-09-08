@@ -41,7 +41,7 @@
                                 <input type="password" 
                                        class="form-control @error('senha') is-invalid @enderror" 
                                        id="senha" 
-                                       name="senha" 
+                                       name="password" 
                                        required>
                                 @error('senha')
                                     <div class="invalid-feedback">
