@@ -11,7 +11,7 @@
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h1>Sistema de Estoque</h1>
                 <div>
-                    <span class="badge bg-secondary me-2">{{ $products->count() }} produtos</span>
+                    <span class="badge bg-secondary me-2">{{ $products->total() }} produtos</span>
                     <button type="button" class="btn btn-primary" onclick="syncWithApi()">
                         <i class="fas fa-sync-alt"></i> Sincronizar com API
                     </button>
