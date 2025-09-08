@@ -114,6 +114,13 @@
                         </div>
                     @endif
                 </div>
+                <div class="d-flex justify-content-end align-items-center mt-3 ml-1 mr-1 " >
+                    
+                 <div >
+                    {{ $products->links('pagination::bootstrap-5') }}
+                </div>
+                    
+                </div>
             </div>
         </div>
     </div>
@@ -147,8 +154,9 @@ function updateStock(productId) {
     .then(response => response.json())
     .then(data => {
         if (data.success) {
-            // Mostrar toast de sucesso
+
             showToast(data.message, 'success');
+
         } else {
             showToast('Erro ao atualizar estoque', 'error');
         }
@@ -183,18 +191,23 @@ function syncWithApi() {
 
 // Mostrar toast
 function showToast(message, type = 'success') {
+     
+    const container = document.getElementById('toast-container') || document.body;
+
     const toast = document.createElement('div');
     toast.className = `toast align-items-center text-white bg-${type === 'success' ? 'success' : 'danger'} border-0`;
     toast.setAttribute('role', 'alert');
+    toast.setAttribute('aria-live', 'assertive');
+    toast.setAttribute('aria-atomic', 'true');
     toast.innerHTML = `
         <div class="d-flex">
-            <div class="toast-body">${message}</div>
-            <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+        <div class="toast-body">${message}</div>
+        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Fechar"></button>
         </div>
     `;
     
-    document.body.appendChild(toast);
-    const bsToast = new bootstrap.Toast(toast);
+    container.appendChild(toast);
+    const bsToast = new bootstrap.Toast(toast, { autohide: true, delay: 3000 });
     bsToast.show();
     
     toast.addEventListener('hidden.bs.toast', () => {

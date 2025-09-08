@@ -97,8 +97,9 @@
     </main>
 
     <!-- Toast Container -->
-    <div class="toast-container position-fixed top-0 end-0 p-3"></div>
-
+    <div id="toast-container" class="toast-container position-fixed bottom-0 end-0 p-3" style="z-index: 1100;"></div>
+        
+    
     <!-- Footer -->
     <footer class="bg-light text-center text-muted py-4 mt-5">
         <div class="container">
