@@ -82,19 +82,17 @@ Os comandos a abixo são executados dentro do container, ou seja, dentro do work
 ```bash
 docker compose exec workspace composer install
 ```
-
-- Esse comando executa as migratins e em seguida os seeders. 
-```bash
-docker compose exec workspace php artisan migrate:fresh --seed 
-```
-
 - Gerar o APP_KEY do projeto. 
 ```bash
 docker compose exec workspace php artisan key:generate
 ```
+- Esse comando executa as migratins e em seguida os seeders. 
+```bash
+docker compose exec workspace php artisan migrate:fresh --seed 
+```
 - Instala  as depencias do projeto javascript. 
 ```bash
-npm install
+docker compose exec workspace npm install
 ```
 
 - Isso pode ocorre, ele pode tentar escrever no diretório bootstrap e não conseguir devido a falta de permissão, caso ocorre entre container do workspace e de as permissões necessárias com os comandos abaixo.
