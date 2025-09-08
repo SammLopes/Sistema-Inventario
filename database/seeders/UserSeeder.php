@@ -15,15 +15,15 @@ class UserSeeder extends Seeder
     {
         
         User::create([
-            'nome' => 'Admin',
+            'name' => 'Admin',
             'email' => 'admin@teste.com',
-            'senha' => '123456' // Será criptografada automaticamente pelo mutator
+            'password' => '123456' // Será criptografada automaticamente pelo mutator
         ]);
 
         User::create([
-            'nome' => 'João Silva',
+            'name' => 'João Silva',
             'email' => 'joao@teste.com',
-            'senha' => 'senha123'
+            'password' => 'senha123'
         ]);
 
     }
