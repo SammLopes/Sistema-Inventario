@@ -1,61 +1,110 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Sistema de Estoque
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Esse é o manual de como rodar o projeto usando o laradock. 
 
-## About Laravel
+## Passo a passo para rodar com Laradock
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+### 1) Clonar o projeto. 
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+- Primeiro clonamos o projeto passando a flag `--recurse-submodules`, para poder clonar também o projeto do laradock. 
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+git clone --recurse-submodules <git@github.com:SammLopes/Sistema-Inventario.git || https://github.com/SammLopes/Sistema-Inventario.git>
+```
 
-## Learning Laravel
+### 1) Preparar variáveis de ambiente
+Crie os arquivos de ambiente a partir dos exemplos:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+```bash
+cp laradock/.env.example laradock/.env
+cp .env.example .env
+```
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Edite **`laradock/.env`** (serviços/portas/credenciais) :
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### Workspace ###############################
+WORKSPACE_SSH_PORT=2223
 
-## Laravel Sponsors
+### NGINX #################################################
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+NGINX_HOST_HTTP_PORT=85
+NGINX_HOST_HTTPS_PORT=443
+NGINX_HOST_LOG_PATH=./logs/nginx/
+NGINX_SITES_PATH=./nginx/sites/
+NGINX_PHP_UPSTREAM_CONTAINER=php-fpm
+NGINX_PHP_UPSTREAM_PORT=9000
+NGINX_SSL_PATH=./nginx/ssl/
 
-### Premium Partners
+### MySQL ##################
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+MYSQL_VERSION=8.4
+MYSQL_DATABASE=inventory_db
+MYSQL_USER=app
+MYSQL_PASSWORD=secret
+MYSQL_PORT=3307
+MYSQL_ROOT_PASSWORD=root
+MYSQL_ENTRYPOINT_INITDB=./mysql/docker-entrypoint-initdb.d
 
-## Contributing
+```
+- Tive que troca os valores de algumas variáveis devido á algusn conflitos no meu computador. 
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Edite **`.env`** do **Laravel** (aplicação):
+```
+APP_URL=http://localhost
+DB_CONNECTION=mysql
+DB_HOST=mysql          # nome do serviço no docker-compose do Laradock
+DB_PORT=3306
+DB_DATABASE=inventory_db
+DB_USERNAME=app
+DB_PASSWORD=secret
 
-## Code of Conduct
+SESSION_DRIVER=database
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+> **Importante:** O **DB_HOST** deve ser o **nome do serviço** no `docker-compose` do Laradock (geralmente `mysql`), e **não** `127.0.0.1`.
 
-## Security Vulnerabilities
+### 2) Subir os serviços (Nginx, MySQL, NgInx, Php-Fpm)
+```bash
+docker compose -f laradock/docker-compose.yml up -d mysql nginx php-fpm mysql 
+```
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+### 3) Executar os comandos do Laravel 
 
-## License
+Os comandos a abixo são executados dentro do container, ou seja, dentro do workspace. 
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+- Instala as dependencias. 
+```bash
+docker compose exec workspace composer install
+```
+
+- Esse comando executa as migratins e em seguida os seeders. 
+```bash
+docker compose exec workspace php artisan migrate:fresh --seed 
+```
+
+- Gerar o APP_KEY do projeto. 
+```bash
+docker compose exec workspace php artisan key:generate
+```
+- Instala  as depencias do projeto javascript. 
+```bash
+npm install
+```
+
+- Isso pode ocorre, ele pode tentar escrever no diretório bootstrap e não conseguir devido a falta de permissão, caso ocorre entre container do workspace e de as permissões necessárias com os comandos abaixo.
+
+#### Permissões (se necessário)
+```bash
+chown -R www-data:www-data storage bootstrap/cache || true
+chmod -R ug+rwX storage bootstrap/cache
+```
+
+### 4) Acessar a aplicação
+- Navegador: **http://localhost** (porta configurada no `laradock/.env`)
+- Logs úteis:
+  ```bash
+  docker compose -f laradock/docker-compose.yml logs -f nginx
+  docker compose -f laradock/docker-compose.yml logs -f mysql
+  ```
+
