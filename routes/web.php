@@ -22,4 +22,6 @@ Route::middleware('auth')->group( function(){
     Route::put('/produtos/{product}/estoque', [ProductController::class, 'updateStock'])->name('products.update-stock');
     Route::post('/produtos/sync-api', [ProductController::class, 'syncWithApi'])->name('products.sync-api');
 
+    Route::delete('/produtos/{product}/estoque', [ProductController::class, 'deleteStock'])->name('products.remove-stock');
+
 });

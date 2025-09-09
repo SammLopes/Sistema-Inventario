@@ -73,7 +73,7 @@
                                                 @endif
                                             </td>
                                             <td>
-                                                <strong>{{ $product->nome }}</strong>
+                                                <strong>{{ $product->name }}</strong>
                                                 @if($product->description)
                                                     <br><small class="text-muted">{{ Str::limit($product->description, 60) }}</small>
                                                 @endif
@@ -100,6 +100,13 @@
                                                         onclick="updateStock({{ $product->id }})">
                                                     <i class="fas fa-save"></i>
                                                 </button>
+                                                <button 
+                                                        type="button"
+                                                        class="btn btn-sm btn-danger" 
+                                                        onclick="removeStock({{ $product->id }})">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                            
                                             </td>
                                         </tr>
                                     @endforeach
@@ -139,6 +146,32 @@
 </div>
 
 <script>
+
+function removeStock(productId){
+
+    fetch(`/produtos/${productId}/estoque`, {
+        method: 'DELETE',
+        headers: {
+            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+        }
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(" TEste ", data);
+        if (data.success) {
+
+            window.location.reload();   
+            showToast(data.message, 'success');
+        } else {
+            showToast('Erro ao remover do estoque', 'error');
+        }
+    })
+    .catch(error => {
+        console.error('Erro:', error);
+        showToast('Erro ao remover do estoque', 'error');
+    });
+}
+
 // Atualizar estoque
 function updateStock(productId) {
     const estoque = document.getElementById(`estoque_${productId}`).value;

@@ -53,4 +53,22 @@ class ProductController extends Controller
         return redirect()->route('products.index')->with('success', $result['message']);
     }
 
+    public function deleteStock(string $productId){
+
+        $product = Product::find($productId);
+
+        if( empty($productId) || (int)$productId < 0 ){
+            return response()->json([
+                'success' => false,
+                'message' => 'ID de produto inválido'
+            ], 400);
+        }
+
+        $product->delete();
+         
+        return response()->json([
+            'success' => true,
+            'message' => 'Estoque removido com sucesso!',
+        ], 200);
+    }   
 }
