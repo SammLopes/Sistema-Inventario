@@ -15,27 +15,48 @@ class ProductSeeder extends Seeder
     {
         Product::truncate();
 
-        $products = [
+       $products = [
             [
-                'name' => 'Produto Local 1',
-                'price' => 29.90,
-                'stock' => 15,
-                'category' => 'local',
-                'description' => 'Produto criado localmente para demonstração'
+                'name' => 'Camiseta TechFit',
+                'price' => 59.90,
+                'stock' => 25,
+                'category' => 'Vestuário',
+                'description' => 'Camiseta esportiva leve e respirável, ideal para treinos e uso diário'
             ],
             [
-                'name' => 'Produto Local 2', 
-                'price' => 45.50,
-                'stock' => 8,
-                'category' => 'local',
-                'description' => 'Outro produto local de exemplo'
+                'name' => 'Fone Bluetooth Pro',
+                'price' => 199.90,
+                'stock' => 12,
+                'category' => 'Eletrônicos',
+                'description' => 'Fone sem fio com cancelamento de ruído e bateria de até 30 horas'
             ],
             [
-                'name' => 'Produto Local 3',
-                'price' => 78.00,
-                'stock' => 3,
-                'category' => 'local',
-                'description' => 'Produto com estoque baixo para teste'
+                'name' => 'Cafeteira Automática',
+                'price' => 349.00,
+                'stock' => 5,
+                'category' => 'Eletrodomésticos',
+                'description' => 'Cafeteira inteligente com timer programável e função de manter aquecido'
+            ],
+            [
+                'name' => 'Tênis Running X',
+                'price' => 299.99,
+                'stock' => 18,
+                'category' => 'Calçados',
+                'description' => 'Tênis de corrida com amortecimento avançado e design leve'
+            ],
+            [
+                'name' => 'Mochila Casual Urban',
+                'price' => 149.90,
+                'stock' => 30,
+                'category' => 'Acessórios',
+                'description' => 'Mochila resistente à água com compartimento para notebook até 15"'
+            ],
+            [
+                'name' => 'Luminária LED Smart',
+                'price' => 89.90,
+                'stock' => 10,
+                'category' => 'Casa',
+                'description' => 'Luminária inteligente com ajuste de cor e controle por aplicativo'
             ]
         ];
 
