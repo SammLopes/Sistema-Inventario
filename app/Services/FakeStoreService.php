@@ -54,7 +54,6 @@ class FakeStoreService
             }
         }
 
-        // Remover produtos que não existem mais na API
         $deletedProducts = Product::whereNotNull('api_id')
                                 ->whereNotIn('api_id', $apiIds)
                                 ->get();
@@ -63,8 +62,6 @@ class FakeStoreService
             $product->delete();
             $deleted++;
         }
-
-        Log::info("Sincronização concluída: {$created} criados, {$updated} atualizados, {$deleted} removidos");
 
         return [
             'success' => true,

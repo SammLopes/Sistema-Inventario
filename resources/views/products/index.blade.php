@@ -41,6 +41,31 @@
             <div class="card">
                 <div class="card-header">
                     <h5 class="mb-0">Produtos Cadastrados</h5>
+                    <form method="GET" action="{{ route('products.index') }}" id="filter-form" class="flex items-center gap-2 mb-3">
+                         <div class="d-flex align-items-center mt-3">
+                            <label for="category" class="form-label mb-0 me-2">Categoria:</label>
+                            <select name="category" id="category" class="form-select form-select-sm" style="width: 150px"
+                                    onchange="document.getElementById('filter-form').submit()">
+                                <option value="">Todas</option>
+                                @foreach($categories as $cat)
+                                    <option value="{{ $cat }}" {{ ($category === $cat) ? 'selected' : '' }}>{{ $cat }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+
+                        <div class="d-flex align-items-center mt-3">
+                            <label for="q" class="form-label mb-0 me-2">Buscar:</label>
+                            <input type="text" name="q" id="q" value="{{ $q }}" 
+                                class="form-control form-control-sm" 
+                                style="width: 200px;" placeholder="Nome do produto">
+                        </div>
+
+                        <button type="submit" class="btn btn-primary btn-sm mt-1">Filtrar</button>
+
+                        @if($category || $q)
+                            <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-sm mt-1">Limpar</a>
+                        @endif
+                    </form>
                 </div>
                 <div class="card-body p-0">
                     @if($products->count() > 0)
@@ -60,7 +85,7 @@
                                     @foreach($products as $product)
                                         <tr>
                                             <td>
-                                                @if($product->imagem)
+                                                @if($product->image)
                                                     <img src="{{ $product->image }}" 
                                                          alt="{{ $product->name }}" 
                                                          class="img-thumbnail" 
@@ -114,13 +139,35 @@
                             </table>
                         </div>
                     @else
-                        <div class="text-center py-5">
-                            <i class="fas fa-box-open fa-3x text-muted mb-3"></i>
-                            <h5>Nenhum produto cadastrado</h5>
-                            <p class="text-muted">Clique em "Sincronizar com API" para importar produtos</p>
-                        </div>
+                        @if($hasAnyProducts && ($category || $q))
+                            <div class="text-center py-5">
+                                <div class="mb-2">
+                                    {{-- seu ícone opcional --}}
+                                    <i class="bi bi-search" style="font-size: 2rem;"></i>
+                                </div>
+                                <h5>Nenhum produto encontrado</h5>
+                                <p class="text-muted mb-3">
+                                    Ajuste os filtros de <strong>Categoria</strong> e/ou <strong>Buscar</strong>.
+                                </p>
+                                <a href="{{ route('products.index') }}" class="btn btn-outline-secondary btn-sm">
+                                    Limpar filtros
+                                </a>
+                            </div>
+                        @else
+                            <div class="text-center py-5">
+                                <div class="mb-2">
+                                    {{-- seu ícone atual da caixinha --}}
+                                    <i class="bi bi-box-seam" style="font-size: 2rem;"></i>
+                                </div>
+                                <h5>Nenhum produto cadastrado</h5>
+                                <p class="text-muted mb-3">
+                                    Clique em <strong>“Sincronizar com API”</strong> para importar produtos.
+                                </p>
+                            </div>
+                        @endif
                     @endif
                 </div>
+
                 <div class="d-flex justify-content-end align-items-center mt-3 ml-1 mr-1 " >
                     
                  <div >
